@@ -38,9 +38,24 @@ Install the apimodels image skill from https://github.com/stimQQ/apimodels-skill
 
 ```bash
 git clone https://github.com/stimQQ/apimodels-skill
-cp -r apimodels-skill ~/.claude/skills/apimodels-image
-export APIMODELS_API_KEY=sk_...        # from https://apimodels.app/console/api-keys
+cp -r apimodels-skill/image ~/.claude/skills/apimodels-image   # the skill is image/, not the repo root
+export APIMODELS_API_KEY=sk_...                                 # from https://apimodels.app/console/api-keys
 ```
+
+**Claude desktop / claude.ai** install a skill from a `.zip` instead
+(Settings → Capabilities → enable *Code execution*, then Customize → Skills →
+`+ Create skill`). Zip the `image/` directory so that it is the root of the
+archive:
+
+```bash
+cd apimodels-skill && zip -r apimodels-image.zip image -x '*.DS_Store'
+```
+
+**No shell?** (claude.ai, Claude desktop — the sandbox has no access to your
+environment, and Claude has no per-skill credential store today.) Just paste the
+key when the agent asks. It saves it to `~/.apimodels/credentials` (mode 0600)
+and will not ask again. The key is never echoed back and never passed as a
+command argument.
 
 Verify:
 

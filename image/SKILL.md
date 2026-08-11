@@ -38,17 +38,47 @@ all behind one endpoint. Switching models is a one-field change.
 8. **Failures are never charged.** If a generation fails, say so plainly and offer
    a retry or a different model — do not imply the user paid for it.
 
-## Setup
+## The API key
 
-The key comes from https://apimodels.app → Console → API Keys.
+Run `node scripts/generate.mjs --check` first. It finds a key in this order:
+`APIMODELS_API_KEY` in the environment, then `~/.apimodels/credentials`.
+
+**If it reports no key, ask the user for one — do not proceed with a placeholder
+and do not guess.** Say this:
+
+> I need an apimodels.app API key. Create one free at
+> https://apimodels.app/console/api-keys and paste it here — it starts with `sk_`.
+
+When they paste it, save it so they only have to do this once:
 
 ```bash
-export APIMODELS_API_KEY=sk_...
-node scripts/generate.mjs --check      # verifies the key and prints the balance
+printf %s 'sk_THEIR_KEY' | node scripts/generate.mjs --save-key
 ```
 
-If `APIMODELS_API_KEY` is unset, stop and ask the user for a key. Do not proceed
-with a placeholder.
+Then continue with what they originally asked for. Do not make them repeat it.
+
+**Handling their key — these are not optional:**
+
+- **Never echo the key back**, not in a summary, not in a confirmation, not in a
+  code block. `--save-key` prints only the last 4 characters for exactly this
+  reason.
+- **Never pass it as a command argument.** There is no `--key` flag on purpose:
+  arguments land in the transcript and in process listings. It goes in on stdin.
+- **Never write it into a file the user might commit** — no `.env` in their repo,
+  no config in the project directory. `~/.apimodels/credentials` (mode 0600) is
+  the only place.
+- If a key ever appears in the conversation, mention once that they may want to
+  rotate it at https://apimodels.app/console/api-keys.
+
+**If the user is in a terminal** (Claude Code and similar), the better setup is
+an environment variable, because the key never enters the conversation at all:
+
+```bash
+echo 'export APIMODELS_API_KEY=sk_...' >> ~/.zshrc
+```
+
+Suggest this once, after the first successful generation — not before, since it
+would delay what they actually asked for.
 
 ## Choosing a model
 
