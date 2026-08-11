@@ -1,0 +1,295 @@
+{
+  "_comment": "Auto-generated from apimodels.app. Do not hand-edit — run scripts/build_catalog.mjs.",
+  "generated_from": "apimodels-nextjs IMAGE_MODEL_MAP + models.ts, cross-checked against live DB isActive",
+  "endpoint": "https://apimodels.app/api/v1/images/generations",
+  "count": 24,
+  "models": [
+    {
+      "model": "doubao-seedream-4-5-251128",
+      "name": "Doubao Seedream 4.5",
+      "price": "$0.05",
+      "pricing": {
+        "per image": 0.05
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/doubao-seedream-4-5-251128",
+      "requires_image": false
+    },
+    {
+      "model": "doubao-seedream-5-0-260128",
+      "name": "Doubao Seedream 5.0 Lite (Official)",
+      "price": "$0.055",
+      "pricing": {
+        "per image": 0.055
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/doubao-seedream-5-0-260128",
+      "requires_image": false
+    },
+    {
+      "model": "doubao-seedream-5-0-pro",
+      "name": "Doubao Seedream 5.0 Pro (Official)",
+      "price": "$0.076 / $0.15",
+      "pricing": {
+        "1K": 0.076,
+        "2K": 0.15
+      },
+      "docs": "https://apimodels.app/docs/seedream-5-0-pro",
+      "page": "https://apimodels.app/models/doubao-seedream-5-0-pro",
+      "requires_image": false
+    },
+    {
+      "model": "gemini-2.5-flash-image",
+      "name": "Gemini 2.5 Flash Image",
+      "price": "$0.02",
+      "pricing": {
+        "1K": 0.02
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/gemini-2.5-flash-image",
+      "requires_image": false
+    },
+    {
+      "model": "gemini-3-pro-image",
+      "name": "gemini-3-pro-image",
+      "price": "$0.10+",
+      "pricing": {
+        "1K": 0.1,
+        "2K": 0.1,
+        "4K": 0.15
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/gemini-3-pro-image",
+      "requires_image": false
+    },
+    {
+      "model": "gemini-3.1-flash-image",
+      "name": "gemini-3.1-flash-image",
+      "price": "$0.04+",
+      "pricing": {
+        "512": 0.04,
+        "1K": 0.06,
+        "2K": 0.06,
+        "4K": 0.1
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/gemini-3.1-flash-image",
+      "requires_image": false
+    },
+    {
+      "model": "gpt-image-2",
+      "name": "GPT Image 2",
+      "price": "$0.025+",
+      "pricing": {
+        "1K": 0.025,
+        "2K": 0.03,
+        "4K": 0.05
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/gpt-image-2",
+      "requires_image": false
+    },
+    {
+      "model": "gpt-image-2-all",
+      "name": "GPT Image 2 All",
+      "price": "$0.01+",
+      "pricing": {
+        "1K-low": 0.01,
+        "1K-medium": 0.025,
+        "1K-high": 0.07,
+        "2K-low": 0.025,
+        "2K-medium": 0.04,
+        "2K-high": 0.1,
+        "4K-low": 0.06,
+        "4K-medium": 0.06,
+        "4K-high": 0.23
+      },
+      "docs": "https://apimodels.app/docs/gpt-image-2-all",
+      "page": "https://apimodels.app/models/gpt-image-2-all",
+      "requires_image": false
+    },
+    {
+      "model": "gpt-image-2-lite",
+      "name": "GPT Image 2 Lite",
+      "price": "$0.008 - $0.025",
+      "pricing": {
+        "1K": 0.008,
+        "2K": 0.015,
+        "4K": 0.025
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/gpt-image-2-lite",
+      "requires_image": false
+    },
+    {
+      "model": "grok-4.2-image",
+      "name": "Grok 4.2 Image",
+      "price": null,
+      "pricing": {
+        "per image": 0.03
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/grok-4.2-image",
+      "requires_image": false
+    },
+    {
+      "model": "grok-imagine-image",
+      "name": "Grok Imagine Image",
+      "price": "$0.03",
+      "pricing": {
+        "per image": 0.03
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/grok-imagine-image",
+      "requires_image": false
+    },
+    {
+      "model": "grok-imagine-image-pro",
+      "name": "Grok Imagine Image Pro",
+      "price": "from $0.08",
+      "pricing": {
+        "1K": 0.08,
+        "2K": 0.12
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/grok-imagine-image-pro",
+      "requires_image": false
+    },
+    {
+      "model": "kling-expand",
+      "name": "Kling Expand",
+      "price": null,
+      "pricing": {
+        "1K": 0.023
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/kling-expand",
+      "requires_image": true
+    },
+    {
+      "model": "kling-image-o1",
+      "name": "Kling Omni-Image",
+      "price": "$0.05",
+      "pricing": {
+        "1K": 0.05,
+        "2K": 0.05
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/kling-image-o1",
+      "requires_image": false
+    },
+    {
+      "model": "kling-multi-image",
+      "name": "Kling Multi-Image",
+      "price": null,
+      "pricing": {
+        "1K": 0.045
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/kling-multi-image",
+      "requires_image": true
+    },
+    {
+      "model": "kling-v2-1",
+      "name": "Kling V2.1 Image",
+      "price": null,
+      "pricing": {
+        "text2img": 0.016,
+        "img2img": 0.045
+      },
+      "docs": "https://apimodels.app/docs/kling-image",
+      "page": "https://apimodels.app/models/kling-v2-1",
+      "requires_image": false
+    },
+    {
+      "model": "kling-v2-new",
+      "name": "Kling V3 Omni",
+      "price": "$0.05+",
+      "pricing": {
+        "1K": 0.05,
+        "2K": 0.05,
+        "4K": 0.1
+      },
+      "docs": "https://apimodels.app/docs/kling-image",
+      "page": "https://apimodels.app/models/kling-v2-new",
+      "requires_image": false
+    },
+    {
+      "model": "kling-v3-image",
+      "name": "Kling V3 Image",
+      "price": "$0.05",
+      "pricing": {
+        "image": 0.05
+      },
+      "docs": "https://apimodels.app/docs/kling-image",
+      "page": "https://apimodels.app/models/kling-v3-image",
+      "requires_image": false
+    },
+    {
+      "model": "nanobanana-2-beta",
+      "name": "Nanobanana-2-beta",
+      "price": null,
+      "pricing": {
+        "1K": 0.05,
+        "2K": 0.05,
+        "4K": 0.08
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/nanobanana-2-beta",
+      "requires_image": false
+    },
+    {
+      "model": "qwen3-image",
+      "name": "Qwen Image 3.0",
+      "price": "$0.035",
+      "pricing": {
+        "1K": 0.035,
+        "2K": 0.035
+      },
+      "docs": "https://apimodels.app/docs/qwen3-image",
+      "page": "https://apimodels.app/models/qwen3-image",
+      "requires_image": false
+    },
+    {
+      "model": "qwen3-image-pro",
+      "name": "Qwen Image 3.0 Pro",
+      "price": "$0.037+",
+      "pricing": {
+        "1K": 0.037,
+        "2K": 0.075
+      },
+      "docs": "https://apimodels.app/docs/qwen3-image",
+      "page": "https://apimodels.app/models/qwen3-image-pro",
+      "requires_image": false
+    },
+    {
+      "model": "real-esrgan",
+      "name": "Real-ESRGAN Upscaler",
+      "price": "$0.004",
+      "pricing": {
+        "per image": 0.004
+      },
+      "docs": "https://apimodels.app/docs/real-esrgan",
+      "page": "https://apimodels.app/models/real-esrgan",
+      "requires_image": false
+    },
+    {
+      "model": "sparkpix-image",
+      "name": "SparkPix Image",
+      "price": "$0.008",
+      "pricing": null,
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/sparkpix-image",
+      "requires_image": false
+    },
+    {
+      "model": "sparkpix-image-edit",
+      "name": "SparkPix Image Edit",
+      "price": "$0.013",
+      "pricing": null,
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/sparkpix-image-edit",
+      "requires_image": false
+    }
+  ]
+}
