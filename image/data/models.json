@@ -1,7 +1,7 @@
 {
   "_comment": "Auto-generated from apimodels.app. Do not hand-edit — run scripts/build_catalog.mjs.",
   "generated_from": "apimodels-nextjs IMAGE_MODEL_MAP + models.ts, cross-checked against live DB isActive",
-  "endpoint": "https://apimodels.app/api/v1/images/generations",
+  "endpoint": "https://api.apimodels.app/v1/images/generations",
   "count": 24,
   "models": [
     {

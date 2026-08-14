@@ -35,7 +35,7 @@ import { dirname, join } from 'node:path'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const CATALOG = join(HERE, '..', 'data', 'models.json')
-const API = 'https://apimodels.app/api/v1/images/generations'
+const API = 'https://api.apimodels.app/v1/images/generations'
 
 /** Video models that the image endpoint accepts but which must never be offered
  *  as image models (they bill per second of output). */

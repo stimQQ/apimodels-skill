@@ -19,7 +19,7 @@ import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { readFile, writeFile, mkdir, chmod } from 'node:fs/promises'
 
-const API = 'https://apimodels.app/api/v1/images/generations'
+const API = 'https://api.apimodels.app/v1/images/generations'
 const CONSOLE_URL = 'https://apimodels.app/console/api-keys'
 
 /**
@@ -226,7 +226,7 @@ async function main() {
   if (!key) { console.error(NO_KEY_HINT); process.exit(2) }
 
   if (args.check) {
-    const r = await call('https://apimodels.app/api/v1/balance', { method: 'GET' }, key)
+    const r = await call('https://api.apimodels.app/v1/balance', { method: 'GET' }, key)
     if (!r.ok) { console.error(`✗ ${r.message}${r.hint ? `\n  ${r.hint}` : ''}`); process.exit(1) }
     console.log(`✓ key works. Balance: $${r.data?.balance ?? r.data?.credits ?? '?'}`)
     process.exit(0)
