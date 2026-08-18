@@ -28,6 +28,18 @@ Agent: Using qwen3-image ($0.035) — it renders small text reliably.
 
 ## Install
 
+**With the [Skills CLI](https://skills.sh/) (recommended — works for Claude Code,
+Cursor, Codex, Cline, Gemini CLI and 12+ other agents):**
+
+```bash
+npx skills add stimQQ/apimodels-skill@apimodels-image
+```
+
+> ⚠️ The skill name is `apimodels-image` (from SKILL.md), **not** the directory
+> name `image` — `@image` fails with "No matching skills found".
+
+Skill page: https://skills.sh/stimqq/apimodels-skill/apimodels-image
+
 **In Claude Code / OpenClaw / any agent that reads skills:**
 
 ```
