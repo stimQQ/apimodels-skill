@@ -44,18 +44,44 @@ Run `node scripts/generate.mjs --check` first. It finds a key in this order:
 `APIMODELS_API_KEY` in the environment, then `~/.apimodels/credentials`.
 
 **If it reports no key, ask the user for one — do not proceed with a placeholder
-and do not guess.** Say this:
+and do not guess.** The rule that shapes everything below: **the key should never
+appear in the conversation.** A key that enters the chat lives on in transcripts
+and logs; the flows here exist to keep it out.
 
-> I need an apimodels.app API key. Create one free at
-> https://apimodels.app/console/api-keys and paste it here — it starts with `sk_`.
-
-When they paste it, save it so they only have to do this once:
+**If the user has a terminal** (Claude Code, Cursor and similar — the normal
+case): do **not** ask them to paste the key into the chat. Ask them to run one
+of these themselves, in their own terminal:
 
 ```bash
-printf %s 'sk_THEIR_KEY' | node scripts/generate.mjs --save-key
+# simplest — current shell now, ~/.zshrc or ~/.bashrc to persist:
+export APIMODELS_API_KEY=sk_...
+
+# or store it once for every future session
+# (read -s keeps it out of the screen and shell history):
+read -s KEY && printf %s "$KEY" | node scripts/generate.mjs --save-key && unset KEY
 ```
 
-Then continue with what they originally asked for. Do not make them repeat it.
+Say this:
+
+> I need an apimodels.app API key. Create one free at
+> https://apimodels.app/console/api-keys, then run
+> `export APIMODELS_API_KEY=sk_...` in your terminal — that way the key never
+> passes through this conversation.
+
+Then re-run `--check` and continue with what they originally asked for. Do not
+make them repeat it.
+
+**Only if there is genuinely no terminal** (claude.ai web and desktop sandboxes —
+the sandbox cannot see the user's shell, and there is no per-skill credential
+store today): as a **last resort**, the user may paste the key into the chat.
+If they do, both steps are mandatory:
+
+1. Save it immediately so this never has to happen again:
+   `printf %s 'sk_THEIR_KEY' | node scripts/generate.mjs --save-key`
+2. Tell them — as a standard step, not a suggestion — that the key has now been
+   in this conversation, so once they are done they should rotate it at
+   https://apimodels.app/console/api-keys and set the replacement without
+   pasting it into any chat.
 
 **Handling their key — these are not optional:**
 
@@ -67,18 +93,8 @@ Then continue with what they originally asked for. Do not make them repeat it.
 - **Never write it into a file the user might commit** — no `.env` in their repo,
   no config in the project directory. `~/.apimodels/credentials` (mode 0600) is
   the only place.
-- If a key ever appears in the conversation, mention once that they may want to
-  rotate it at https://apimodels.app/console/api-keys.
-
-**If the user is in a terminal** (Claude Code and similar), the better setup is
-an environment variable, because the key never enters the conversation at all:
-
-```bash
-echo 'export APIMODELS_API_KEY=sk_...' >> ~/.zshrc
-```
-
-Suggest this once, after the first successful generation — not before, since it
-would delay what they actually asked for.
+- **Any key that has appeared in the conversation is a rotation case** — apply
+  step 2 above whenever it happens, however it happened.
 
 ## Choosing a model
 
