@@ -18,6 +18,9 @@
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { readFile, writeFile, mkdir, chmod } from 'node:fs/promises'
+import { createServer } from 'node:http'
+import { randomBytes } from 'node:crypto'
+import { execFile } from 'node:child_process'
 
 const API = 'https://api.apimodels.app/v1/images/generations'
 const CONSOLE_URL = 'https://apimodels.app/console/api-keys'
@@ -57,6 +60,7 @@ Options
   --out <path>          Download the result to this path as well.
   --json                Print machine-readable JSON only.
   --check               Verify the API key and exit.
+  --login               One-click browser authorization — no key ever typed anywhere.
   --save-key            Read a key from stdin and save it (for sandboxes with no shell).
   --help
 
@@ -85,6 +89,7 @@ function parseArgs(argv) {
     else if (a === '--json') o.json = true
     else if (a === '--check') o.check = true
     else if (a === '--save-key') o.saveKey = true
+    else if (a === '--login') o.login = true
     else if (a === '--help' || a === '-h') o.help = true
     else return { error: `unknown argument: ${a}` }
   }
@@ -134,10 +139,84 @@ async function saveKey() {
   return 0
 }
 
+/**
+ * One-click browser authorization (RFC 8252 loopback):
+ *   1. listen on a random 127.0.0.1 port, mint a `state` nonce;
+ *   2. hand the user https://apimodels.app/cli-auth?port=..&state=.. — they log
+ *      in (if needed) and click ONE button;
+ *   3. the browser full-page-redirects to our /callback with a single-use,
+ *      10-minute code (no CORS involved — it's a navigation, not a fetch);
+ *   4. we exchange the code over HTTPS for a freshly-minted key and save it.
+ * The key never touches the conversation, the shell history or the URL bar —
+ * only the throwaway code transits the browser.
+ */
+async function login() {
+  const state = randomBytes(16).toString('base64url')
+  let settle
+  const done = new Promise((resolve) => { settle = resolve })
+
+  const server = createServer(async (req, res) => {
+    const u = new URL(req.url, 'http://127.0.0.1')
+    if (u.pathname !== '/callback') { res.writeHead(404).end(); return }
+    const page = (title, body) =>
+      `<!doctype html><meta charset="utf-8"><body style="font-family:system-ui;background:#111;color:#eee;display:grid;place-items:center;height:100vh"><div style="text-align:center"><h2>${title}</h2><p style="color:#999">${body}</p></div>`
+    if (u.searchParams.get('state') !== state) {
+      res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' })
+      res.end(page('State mismatch', 'This link belongs to a different login attempt. Close this tab and re-run --login.'))
+      return
+    }
+    const code = u.searchParams.get('code') ?? ''
+    try {
+      const r = await fetch('https://apimodels.app/api/cli-auth/exchange', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+        signal: AbortSignal.timeout(30000),
+      })
+      const data = await r.json().catch(() => null)
+      const key = data?.data?.apiKey
+      if (!r.ok || !key) throw new Error(data?.msg || `exchange failed (HTTP ${r.status})`)
+      await mkdir(CRED_DIR, { recursive: true })
+      await writeFile(CRED_FILE, key + '\n', { mode: 0o600 })
+      await chmod(CRED_FILE, 0o600).catch(() => {})
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+      res.end(page('✓ Connected', `Key “${data?.data?.name ?? 'CLI'}” is configured on this machine. You can close this tab and go back to your agent.`))
+      settle({ ok: true, tail: key.slice(-4), name: data?.data?.name })
+    } catch (e) {
+      res.writeHead(502, { 'Content-Type': 'text/html; charset=utf-8' })
+      res.end(page('Authorization failed', `${e.message}. Close this tab and re-run --login.`))
+      settle({ ok: false, error: e.message })
+    }
+  })
+
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
+  const port = server.address().port
+  const url = `https://apimodels.app/cli-auth?port=${port}&state=${state}`
+
+  console.log('Open this link, log in if asked, and click “Authorize”:')
+  console.log(`\n  ${url}\n`)
+  console.log('Waiting for the browser… (10 minutes; Ctrl-C to abort)')
+  // Best-effort auto-open; harmless if there is no GUI.
+  const opener = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open'
+  execFile(opener, [url], () => {})
+
+  const timeout = setTimeout(() => settle({ ok: false, error: 'timed out after 10 minutes' }), 10 * 60 * 1000)
+  const result = await done
+  clearTimeout(timeout)
+  server.close()
+  if (result.ok) {
+    console.log(`✓ saved to ${CRED_FILE} (…${result.tail}), readable only by you. Key name: ${result.name}`)
+    return 0
+  }
+  console.error(`✗ ${result.error}`)
+  return 2
+}
+
 const NO_KEY_HINT =
   `No API key found.\n` +
-  `  Get one at ${CONSOLE_URL} (free to create), then either:\n` +
-  `    • export APIMODELS_API_KEY=sk_...        ← best; add it to ~/.zshrc to persist\n` +
+  `  Easiest: node scripts/generate.mjs --login   ← one browser click, nothing to type\n` +
+  `  Or get one at ${CONSOLE_URL} and either:\n` +
+  `    • export APIMODELS_API_KEY=sk_...        ← add it to ~/.zshrc to persist\n` +
   `    • printf %s "sk_..." | node scripts/generate.mjs --save-key   ← for sandboxes with no shell`
 
 async function call(url, init, key) {
@@ -221,6 +300,7 @@ async function main() {
   if (args.help) { usage(); process.exit(0) }
 
   if (args.saveKey) process.exit(await saveKey())
+  if (args.login) process.exit(await login())
 
   const key = await resolveKey()
   if (!key) { console.error(NO_KEY_HINT); process.exit(2) }

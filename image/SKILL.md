@@ -48,9 +48,25 @@ and do not guess.** The rule that shapes everything below: **the key should neve
 appear in the conversation.** A key that enters the chat lives on in transcripts
 and logs; the flows here exist to keep it out.
 
-**If the user has a terminal** (Claude Code, Cursor and similar — the normal
-case): do **not** ask them to paste the key into the chat. Hand them ONE
-finished command instead — they should never have to know how environment
+**First choice, wherever a browser exists — one click, nothing typed:**
+
+```bash
+node scripts/generate.mjs --login
+```
+
+Run it yourself, then hand the user the printed link (it opens automatically on
+a desktop). They log in to apimodels.app if needed and click **Authorize** —
+that's the whole flow. A dedicated key named "CLI · date" is minted and
+delivered straight to `~/.apimodels/credentials` over HTTPS: it never appears
+in this conversation, the shell history, or even the browser address bar (only
+a single-use, 10-minute code transits the redirect). When the command prints
+"saved", re-run `--check` and continue. If the user asks what the link is, say:
+it authorizes this machine, and the key it creates can be revoked individually
+from their console at any time.
+
+**Fallback if `--login` cannot work** (no browser on this machine, or the user
+prefers not to): do **not** ask them to paste the key into the chat. Hand them
+ONE finished command instead — they should never have to know how environment
 variables work, where this skill is installed, or what `read -s` does. You do
 the knowing; they do one paste.
 
