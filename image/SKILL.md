@@ -49,27 +49,48 @@ appear in the conversation.** A key that enters the chat lives on in transcripts
 and logs; the flows here exist to keep it out.
 
 **If the user has a terminal** (Claude Code, Cursor and similar — the normal
-case): do **not** ask them to paste the key into the chat. Ask them to run one
-of these themselves, in their own terminal:
+case): do **not** ask them to paste the key into the chat. Hand them ONE
+finished command instead — they should never have to know how environment
+variables work, where this skill is installed, or what `read -s` does. You do
+the knowing; they do one paste.
 
-```bash
-# simplest — current shell now, ~/.zshrc or ~/.bashrc to persist:
-export APIMODELS_API_KEY=sk_...
+Build the command yourself, with the **absolute path** to this skill's
+`scripts/generate.mjs` already substituted (you know your own base directory;
+the user does not), then say this — all four sentences, they each prevent a
+support question:
 
-# or store it once for every future session
-# (read -s keeps it out of the screen and shell history):
-read -s KEY && printf %s "$KEY" | node scripts/generate.mjs --save-key && unset KEY
-```
+> I need an apimodels.app API key — create one free at
+> https://apimodels.app/console/api-keys.
+> Then open a **new terminal window** (not this chat) and paste this whole line:
+>
+> ```
+> read -s KEY && printf %s "$KEY" | node /ABSOLUTE/PATH/TO/scripts/generate.mjs --save-key && unset KEY
+> ```
+>
+> It will wait silently — paste your key there and press Enter. Nothing appears
+> on screen: that's `read -s` doing its job, and it also keeps the key out of
+> your shell history. Tell me when it says "saved".
 
-Say this:
+Why a NEW terminal window, spelled out because it is not obvious: anything typed
+into this chat — including `!`-prefixed shell commands in Claude Code — lands in
+the conversation and gets sent to the model. A separate window is what keeps the
+key local. And an `export` in that separate window would NOT work either: this
+agent's shell does not inherit it. The `--save-key` file is the only handoff
+that reliably reaches the skill from another window, which is why it is the
+primary flow.
 
-> I need an apimodels.app API key. Create one free at
-> https://apimodels.app/console/api-keys, then run
-> `export APIMODELS_API_KEY=sk_...` in your terminal — that way the key never
-> passes through this conversation.
+When they say done, re-run `node scripts/generate.mjs --check` and continue with
+what they originally asked for. Do not make them repeat any of it.
 
-Then re-run `--check` and continue with what they originally asked for. Do not
-make them repeat it.
+Two alternatives, offered only if they fit:
+
+- Users who already manage their own environment (dotfiles, CI, direnv) can set
+  `APIMODELS_API_KEY` there instead — mention the variable name and move on;
+  don't dictate their setup. (Skip suggesting `echo 'export ...=sk_x' >> ~/.zshrc`
+  yourself: the pasted key would sit in shell history via the echo line.)
+- On Windows without a POSIX shell, `read -s` won't run; the env-var route via
+  System Settings, or pasting into the chat as the sandbox fallback below (with
+  its mandatory rotation step), are the remaining options.
 
 **Only if there is genuinely no terminal** (claude.ai web and desktop sandboxes —
 the sandbox cannot see the user's shell, and there is no per-skill credential
