@@ -142,7 +142,11 @@ candidates with prices and let them choose.
 | The user wants | Model | Why |
 |---|---|---|
 | A general image, good all-rounder | `gpt-image-2` | Native 1K/2K/4K, best general in-image text, 16 reference images |
-| Cheapest usable draft | `sparkpix-image` ($0.008) or `gpt-image-2-lite` ($0.008) | For iterating before a final render |
+| Cheapest usable draft | `sparkpix-image` ($0.008) or `gpt-image-2-lite` ($0.01, ~1.5 MP) | For iterating before a final render |
+| Newest OpenAI image model, fast | `gpt-image-2.5-flare` | Price = resolution x quality ($0.008 1K-low … $0.30 4K-max); default medium. Pass `--quality` to pick the tier |
+| Newest OpenAI image model, max precision | `gpt-image-2.5-sunburst` | Same price grid as Flare, ~1.6x slower, default high. For hero shots, packaging, print |
+| Grok look, cheap | `grok-4.2-image` ($0.0075) | Budget tier of Grok Imagine Image |
+| Grok Imagine newest | `grok-imagine-image-2.0` ($0.03–$0.06) | 1K/2K; `--quality low` or `medium` picks the price |
 | **Text-heavy layout** — poster, menu, infographic, UI mock | `qwen3-image` | 10px small text, 12 languages, 20+ fonts; 1K and 2K same price |
 | Same, but photoreal detail matters | `qwen3-image-pro` | Slower (median 121s, 10% over 324s) — allow 8 minutes |
 | Realistic portrait / highest fidelity | `gemini-3-pro-image` | Gemini 3 Pro Image |
@@ -164,6 +168,7 @@ default to `gpt-image-2`. It is the safest all-rounder here.
 - 4K needed → `gpt-image-2` or `doubao-seedream-5-0-260128` (Seedream 5.0 Lite). Seedream 5.0 Pro and Flash stop at 2K; Qwen tops out at 2K.
 - Layer splitting is billed per output image. Before running `--layers`, tell the user the cost depends on how many layers come back (base + up to 16, so at most $0.51).
 - Nobody needs Pro tiers for drafts. Iterate cheap, render final expensive.
+- On resolution x quality models, quality IS the price. Quote the exact cell from data/models.json (e.g. gpt-image-2.5 2K-high = $0.04) before rendering, and never raise quality without saying what it costs.
 
 ## Generating
 
@@ -176,6 +181,7 @@ node scripts/generate.mjs --model gpt-image-2 --prompt "a red bicycle on a wet s
 #   --aspect 1:1|16:9|9:16|4:3|3:4|3:2|2:3|21:9
 #   --image <url>                reference image; repeat for several
 #   --out ./picture.png          also download the result next to you
+#   --quality low|medium|high…   price tier on resolution x quality models (gpt-image-2.5-*, grok-imagine-image-2.0)
 #   --json                       machine-readable output
 
 # Edit an existing image

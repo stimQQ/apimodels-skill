@@ -2,7 +2,7 @@
   "_comment": "Auto-generated from apimodels.app. Do not hand-edit — run scripts/build_catalog.mjs.",
   "generated_from": "apimodels-nextjs IMAGE_MODEL_MAP + models.ts, cross-checked against live DB isActive",
   "endpoint": "https://api.apimodels.app/v1/images/generations",
-  "count": 25,
+  "count": 28,
   "models": [
     {
       "model": "doubao-seedream-4-5-251128",
@@ -125,26 +125,78 @@
     {
       "model": "gpt-image-2-lite",
       "name": "GPT Image 2 Lite",
-      "price": "$0.008 - $0.025",
+      "price": "$0.01",
       "pricing": {
-        "1K": 0.008,
-        "2K": 0.015,
-        "4K": 0.025
+        "per image": 0.01
       },
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/gpt-image-2-lite",
-      "requires_image": false
+      "requires_image": false,
+      "note": "Flat $0.01, about 1.5 MP at the requested aspect ratio. 2K/4K were retired on 2026-08-31 — use gpt-image-2 for those."
+    },
+    {
+      "model": "gpt-image-2.5-flare",
+      "name": "GPT Image 2.5 Flare",
+      "price": "$0.008 - $0.30",
+      "pricing": {
+        "1K-low": 0.008,
+        "1K-medium": 0.02,
+        "1K-high": 0.03,
+        "1K-xhigh": 0.05,
+        "1K-max": 0.08,
+        "2K-low": 0.02,
+        "2K-medium": 0.025,
+        "2K-high": 0.04,
+        "2K-xhigh": 0.08,
+        "2K-max": 0.15,
+        "4K-low": 0.02,
+        "4K-medium": 0.045,
+        "4K-high": 0.08,
+        "4K-xhigh": 0.17,
+        "4K-max": 0.3
+      },
+      "docs": "https://apimodels.app/docs/gpt-image-2-5",
+      "page": "https://apimodels.app/models/gpt-image-2.5-flare",
+      "requires_image": false,
+      "note": "OpenAI GPT Image 2.5, fast tier. Price = resolution (1K/2K/4K) x quality (low/medium/high/xhigh/max); default quality medium. Same price grid as Sunburst — you choose speed vs precision, not budget."
+    },
+    {
+      "model": "gpt-image-2.5-sunburst",
+      "name": "GPT Image 2.5 Sunburst",
+      "price": "$0.008 - $0.30",
+      "pricing": {
+        "1K-low": 0.008,
+        "1K-medium": 0.02,
+        "1K-high": 0.03,
+        "1K-xhigh": 0.05,
+        "1K-max": 0.08,
+        "2K-low": 0.02,
+        "2K-medium": 0.025,
+        "2K-high": 0.04,
+        "2K-xhigh": 0.08,
+        "2K-max": 0.15,
+        "4K-low": 0.02,
+        "4K-medium": 0.045,
+        "4K-high": 0.08,
+        "4K-xhigh": 0.17,
+        "4K-max": 0.3
+      },
+      "docs": "https://apimodels.app/docs/gpt-image-2-5",
+      "page": "https://apimodels.app/models/gpt-image-2.5-sunburst",
+      "requires_image": false,
+      "note": "OpenAI GPT Image 2.5, precision tier (about 1.6x slower than Flare). Same price grid as Flare; default quality high. For hero shots, packaging, print, material detail."
     },
     {
       "model": "grok-4.2-image",
       "name": "Grok 4.2 Image",
-      "price": null,
+      "price": "$0.0075",
       "pricing": {
-        "per image": 0.03
+        "per image": 0.0075
       },
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/grok-4.2-image",
-      "requires_image": false
+      "requires_image": false,
+      "note": "Budget tier of Grok Imagine Image — same model, a quarter of the price of grok-imagine-image."
     },
     {
       "model": "grok-imagine-image",
@@ -156,6 +208,21 @@
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/grok-imagine-image",
       "requires_image": false
+    },
+    {
+      "model": "grok-imagine-image-2.0",
+      "name": "Grok Imagine Image 2.0",
+      "price": "$0.03 - $0.06",
+      "pricing": {
+        "1K-low": 0.03,
+        "1K-medium": 0.045,
+        "2K-low": 0.04,
+        "2K-medium": 0.06
+      },
+      "docs": "https://apimodels.app/docs/grok-image",
+      "page": "https://apimodels.app/models/grok-imagine-image-2",
+      "requires_image": false,
+      "note": "xAI Grok Imagine Image 2.0. 1K/2K only; quality low or medium (default medium) — quality selects the price tier."
     },
     {
       "model": "grok-imagine-image-pro",

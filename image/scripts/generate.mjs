@@ -57,6 +57,9 @@ Options
   --image <url>         Reference image URL. Repeat for multiple.
   --resolution <r>      1K | 2K | 4K (model-dependent).
   --aspect <a>          1:1 16:9 9:16 4:3 3:4 3:2 2:3 21:9  (or auto).
+  --quality <q>         low | medium | high | xhigh | max. Selects the PRICE TIER on models priced by
+                        resolution x quality (gpt-image-2.5-*, grok-imagine-image-2.0 [low|medium],
+                        gpt-image-2-all). See the pricing grid in data/models.json before choosing.
   --background transparent
                         Keep a transparent background (PNG with alpha). Edit mode only:
                         pass exactly one --image that is a PNG with an alpha channel.
@@ -93,6 +96,7 @@ function parseArgs(argv) {
     else if (a === '--resolution') o.resolution = next()
     else if (a === '--aspect' || a === '--aspect-ratio') o.aspect = next()
     else if (a === '--background') o.background = next()
+    else if (a === '--quality') o.quality = next()
     else if (a === '--layers') o.layers = true
     else if (a === '--out') o.out = next()
     else if (a === '--json') o.json = true
@@ -340,6 +344,7 @@ async function main() {
   if (args.aspect) body.aspect_ratio = args.aspect
   if (args.images.length) body.image_urls = args.images
   if (args.background) body.background = args.background
+  if (args.quality) body.quality = args.quality
   if (args.layers) body.layer_decomposition = true
 
   if (!args.json) {
