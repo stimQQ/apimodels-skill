@@ -57,6 +57,13 @@ Options
   --image <url>         Reference image URL. Repeat for multiple.
   --resolution <r>      1K | 2K | 4K (model-dependent).
   --aspect <a>          1:1 16:9 9:16 4:3 3:4 3:2 2:3 21:9  (or auto).
+  --background transparent
+                        Keep a transparent background (PNG with alpha). Edit mode only:
+                        pass exactly one --image that is a PNG with an alpha channel.
+                        Seedream 5.0 Flash and Pro only.
+  --layers              Split ONE --image into a base plus up to 16 transparent PNG layers
+                        (text, subjects, props), each with a name and position. --prompt is
+                        optional here. Billed per output image. doubao-seedream-5-0-flash only.
   --out <path>          Download the result to this path as well.
   --json                Print machine-readable JSON only.
   --check               Verify the API key and exit.
@@ -85,6 +92,8 @@ function parseArgs(argv) {
     else if (a === '--image') o.images.push(next())
     else if (a === '--resolution') o.resolution = next()
     else if (a === '--aspect' || a === '--aspect-ratio') o.aspect = next()
+    else if (a === '--background') o.background = next()
+    else if (a === '--layers') o.layers = true
     else if (a === '--out') o.out = next()
     else if (a === '--json') o.json = true
     else if (a === '--check') o.check = true
@@ -278,7 +287,15 @@ async function poll(taskId, key, onTick) {
     if (state === 'completed') {
       const urls = d?.resultUrls ?? []
       if (!urls.length) return fail('the task reported success but returned no image URL.')
-      return { ok: true, urls, seconds: Math.round(elapsed / 1000) }
+      // Layer splitting returns one URL per layer plus per-layer metadata in
+      // resultJson.layers (name, z_index, bounding_box). resultJson arrives as a
+      // JSON string on this endpoint.
+      let layers = null
+      try {
+        const rj = typeof d?.resultJson === 'string' ? JSON.parse(d.resultJson) : d?.resultJson
+        if (Array.isArray(rj?.layers)) layers = rj.layers
+      } catch { /* no layer metadata */ }
+      return { ok: true, urls, layers, seconds: Math.round(elapsed / 1000) }
     }
     if (state === 'failed') return describeFailure(d)
     onTick?.(Math.round(elapsed / 1000))
@@ -313,15 +330,21 @@ async function main() {
   }
 
   if (!args.model) { console.error('--model is required. Pick one from data/models.json.'); process.exit(2) }
-  if (!args.prompt) { console.error('--prompt is required.'); process.exit(2) }
+  if (!args.prompt && !args.layers) { console.error('--prompt is required.'); process.exit(2) }
+  if (args.layers && args.images.length !== 1) { console.error('--layers needs exactly one --image to split.'); process.exit(2) }
+  if (args.background && args.images.length !== 1) { console.error('--background transparent needs exactly one --image (a PNG with alpha).'); process.exit(2) }
 
-  const body = { model: args.model, prompt: args.prompt }
+  const body = { model: args.model }
+  if (args.prompt) body.prompt = args.prompt
   if (args.resolution) body.resolution = args.resolution
   if (args.aspect) body.aspect_ratio = args.aspect
   if (args.images.length) body.image_urls = args.images
+  if (args.background) body.background = args.background
+  if (args.layers) body.layer_decomposition = true
 
   if (!args.json) {
-    const mode = args.images.length ? `editing with ${args.images.length} reference image(s)` : 'generating'
+    const mode = args.layers ? 'splitting the image into layers'
+      : args.images.length ? `editing with ${args.images.length} reference image(s)` : 'generating'
     console.log(`▸ ${args.model}: ${mode}…`)
   }
 
@@ -360,10 +383,21 @@ async function main() {
   }
 
   if (args.json) {
-    console.log(JSON.stringify({ ok: true, taskId, urls: result.urls, seconds: result.seconds, saved }))
+    console.log(JSON.stringify({ ok: true, taskId, urls: result.urls, ...(result.layers ? { layers: result.layers } : {}), seconds: result.seconds, saved }))
   } else {
     console.log(`✓ done in ${result.seconds}s`)
-    for (const u of result.urls) console.log(`  ${u}`)
+    if (result.layers) {
+      // One line per layer: index 0 is the flattened base, 1..N the layers in stacking order.
+      result.urls.forEach((u, i) => {
+        const l = result.layers[i] ?? {}
+        const b = l.bounding_box
+        const box = b ? `  box=${JSON.stringify(b)}` : ''
+        console.log(`  [${i}] ${l.name ?? (i === 0 ? 'base' : 'layer')}${box}\n      ${u}`)
+      })
+      console.log(`  ${result.urls.length} images, billed per image. Layer names come from the model and may be in Chinese.`)
+    } else {
+      for (const u of result.urls) console.log(`  ${u}`)
+    }
     if (saved) console.log(`  saved → ${saved.path} (${(saved.bytes / 1024).toFixed(0)} KB)`)
     console.log('  note: these URLs expire after 7 days.')
   }

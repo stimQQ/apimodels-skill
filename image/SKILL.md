@@ -146,8 +146,11 @@ candidates with prices and let them choose.
 | **Text-heavy layout** — poster, menu, infographic, UI mock | `qwen3-image` | 10px small text, 12 languages, 20+ fonts; 1K and 2K same price |
 | Same, but photoreal detail matters | `qwen3-image-pro` | Slower (median 121s, 10% over 324s) — allow 8 minutes |
 | Realistic portrait / highest fidelity | `gemini-3-pro-image` | Gemini 3 Pro Image |
-| Fast cheap Gemini | `gemini-3.1-flash-image` or `gemini-2.5-flash-image` ($0.02) | |
-| E-commerce product shots, 4K | `doubao-seedream-5-0-pro` | Seedream, 1K/2K/4K |
+| Fast cheap Gemini | `gemini-3.1-flash-image` ($0.06 at 1K/2K) | `gemini-2.5-flash-image` is retired by Google on 2026-10-02 — do not start new work on it |
+| Fast, cheap volume renders | `doubao-seedream-5-0-flash` ($0.03) | ~10–15 s, 1K and 2K same price, no 4K |
+| **Transparent-background edit** — product cut-out, sticker, logo on alpha | `doubao-seedream-5-0-flash` + `--background transparent` | Pass one PNG that already has an alpha channel; the result keeps it. Pro supports this too |
+| **Split an image into layers** — editable poster, text/subject/props separated | `doubao-seedream-5-0-flash` + `--layers` | One input image → base + up to 16 transparent PNG layers with names and positions. $0.03 per output image |
+| Controlled edits, marked regions, multilingual text | `doubao-seedream-5-0-pro` ($0.03 1K / $0.06 2K) | Point at the region to change (box, arrow, hand-drawn mark); 1K/2K only, no 4K |
 | Edit / restyle an existing image | any model above + `--image <url>` | Passing a reference switches the same model to edit mode |
 | Fuse several references | `gpt-image-2` (up to 16) or `kling-multi-image` | |
 | Enlarge / upscale a photo | `real-esrgan` ($0.004) | Pure upscaler, not a generator |
@@ -158,7 +161,8 @@ default to `gpt-image-2`. It is the safest all-rounder here.
 
 **Rules of thumb worth saying out loud:**
 - Text in the image → Qwen Image 3.0. It is the one that reliably renders small type.
-- 4K needed → `gpt-image-2` or Seedream. Qwen tops out at 2K.
+- 4K needed → `gpt-image-2` or `doubao-seedream-5-0-260128` (Seedream 5.0 Lite). Seedream 5.0 Pro and Flash stop at 2K; Qwen tops out at 2K.
+- Layer splitting is billed per output image. Before running `--layers`, tell the user the cost depends on how many layers come back (base + up to 16, so at most $0.51).
 - Nobody needs Pro tiers for drafts. Iterate cheap, render final expensive.
 
 ## Generating
@@ -177,6 +181,13 @@ node scripts/generate.mjs --model gpt-image-2 --prompt "a red bicycle on a wet s
 # Edit an existing image
 node scripts/generate.mjs --model qwen3-image --image https://example.com/a.jpg \
   --prompt "keep the subject, change to soft evening light"
+
+# Edit a PNG that has a transparent background and keep it transparent
+node scripts/generate.mjs --model doubao-seedream-5-0-flash --image https://example.com/product.png \
+  --background transparent --prompt "change the mug color to terracotta orange"
+
+# Split one image into editable layers (base + up to 16 transparent PNGs, each with a name and position)
+node scripts/generate.mjs --model doubao-seedream-5-0-flash --image https://example.com/poster.jpg --layers --json
 
 # Upscale
 node scripts/generate.mjs --model real-esrgan --image https://example.com/small.jpg

@@ -2,7 +2,7 @@
   "_comment": "Auto-generated from apimodels.app. Do not hand-edit — run scripts/build_catalog.mjs.",
   "generated_from": "apimodels-nextjs IMAGE_MODEL_MAP + models.ts, cross-checked against live DB isActive",
   "endpoint": "https://api.apimodels.app/v1/images/generations",
-  "count": 24,
+  "count": 25,
   "models": [
     {
       "model": "doubao-seedream-4-5-251128",
@@ -27,12 +27,25 @@
       "requires_image": false
     },
     {
+      "model": "doubao-seedream-5-0-flash",
+      "name": "Doubao Seedream 5.0 Flash (Official)",
+      "price": "$0.03",
+      "pricing": {
+        "1K": 0.03,
+        "2K": 0.03
+      },
+      "docs": "https://apimodels.app/docs/doubao-seedream",
+      "page": "https://apimodels.app/models/doubao-seedream-5-0-flash",
+      "requires_image": false,
+      "note": "1K/2K only (no 4K). Supports --background transparent (edit one PNG with alpha) and --layers (split one image into a base plus up to 16 transparent layers; billed $0.03 per output image, so a base + 11 layers is $0.36)."
+    },
+    {
       "model": "doubao-seedream-5-0-pro",
       "name": "Doubao Seedream 5.0 Pro (Official)",
-      "price": "$0.076 / $0.15",
+      "price": "$0.03 / $0.06",
       "pricing": {
-        "1K": 0.076,
-        "2K": 0.15
+        "1K": 0.03,
+        "2K": 0.06
       },
       "docs": "https://apimodels.app/docs/seedream-5-0-pro",
       "page": "https://apimodels.app/models/doubao-seedream-5-0-pro",
@@ -47,7 +60,8 @@
       },
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/gemini-2.5-flash-image",
-      "requires_image": false
+      "requires_image": false,
+      "note": "Google retires this model on 2026-10-02. Do not start new work on it; use gemini-3.1-flash-image instead."
     },
     {
       "model": "gemini-3-pro-image",
