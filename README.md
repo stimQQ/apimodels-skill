@@ -85,10 +85,10 @@ Requires Node 18+ (for built-in `fetch`). No npm install, no dependencies.
 | **Text-heavy layouts** | Qwen Image 3.0 renders 10px type, 12 languages, 20+ fonts |
 | **Native 4K** | GPT Image 2 and Seedream |
 | **Editing** | Pass a reference URL to any model — same endpoint, no mode switch |
-| **From $0.008/image** | Iterate cheap, render final expensive |
+| **From $0.006/image** | Iterate cheap, render final expensive |
 | **Failures are free** | Only successful generations are charged |
 
-Full catalog with live prices: [`image/data/models.json`](image/data/models.json) — 24 models
+Full catalog with live prices: [`image/data/models.json`](image/data/models.json) — 35 models
 including `gpt-image-2`, `gemini-3-pro-image`, `qwen3-image`, `qwen3-image-pro`,
 `doubao-seedream-5-0-pro`, `grok-imagine-image`, `kling-image-o1`, `real-esrgan`.
 

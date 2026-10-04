@@ -2,7 +2,7 @@
   "_comment": "Auto-generated from apimodels.app. Do not hand-edit — run scripts/build_catalog.mjs.",
   "generated_from": "apimodels-nextjs IMAGE_MODEL_MAP + models.ts, cross-checked against live DB isActive",
   "endpoint": "https://api.apimodels.app/v1/images/generations",
-  "count": 28,
+  "count": 35,
   "models": [
     {
       "model": "doubao-seedream-4-5-251128",
@@ -52,6 +52,19 @@
       "requires_image": false
     },
     {
+      "model": "flux-2-klein-4b",
+      "name": "FLUX.2 Klein 4B",
+      "price": "$0.006",
+      "pricing": {
+        "per image": 0.006,
+        "per reference image": 0.0015
+      },
+      "docs": "https://apimodels.app/docs/flux-2-klein-4b",
+      "page": "https://apimodels.app/models/flux-2-klein-4b",
+      "requires_image": false,
+      "note": "Fastest and lowest-cost generator here (about 1-2 s). Text-to-image, or edit with up to 3 reference images (+$0.0015 each). Fixed ~2 MP output in 12 aspect ratios; no 1K/2K/4K choice."
+    },
+    {
       "model": "gemini-2.5-flash-image",
       "name": "Gemini 2.5 Flash Image",
       "price": "$0.02",
@@ -77,6 +90,34 @@
       "requires_image": false
     },
     {
+      "model": "gemini-3-pro-image-gemini",
+      "name": "Gemini 3 Pro Image (budget channel)",
+      "price": "$0.03",
+      "pricing": {
+        "1K": 0.03,
+        "2K": 0.03,
+        "4K": 0.03
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/nanobananapro-gemini",
+      "requires_image": false,
+      "note": "Same Gemini 3 Pro Image model at a flat $0.03 for 1K, 2K and 4K. Text-to-image and editing. Use gemini-3-pro-image when consistency matters more than price."
+    },
+    {
+      "model": "gemini-3-pro-image-preview",
+      "name": "Gemini 3 Pro Image (preview model)",
+      "price": "$0.068+",
+      "pricing": {
+        "1K": 0.068,
+        "2K": 0.068,
+        "4K": 0.13
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/nanobananapro",
+      "requires_image": false,
+      "note": "The preview model id of Gemini 3 Pro Image, billed separately from gemini-3-pro-image: $0.068 at 1K/2K, $0.13 at 4K. Text-to-image and editing."
+    },
+    {
       "model": "gemini-3.1-flash-image",
       "name": "gemini-3.1-flash-image",
       "price": "$0.04+",
@@ -89,6 +130,34 @@
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/gemini-3.1-flash-image",
       "requires_image": false
+    },
+    {
+      "model": "gemini-3.1-flash-image-gemini",
+      "name": "Gemini 3.1 Flash Image (budget channel)",
+      "price": "$0.025",
+      "pricing": {
+        "1K": 0.025,
+        "2K": 0.025,
+        "4K": 0.025
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/nanobanana2-gemini",
+      "requires_image": false,
+      "note": "Same Gemini 3.1 Flash Image model at a flat $0.025 for 1K, 2K and 4K. Text-to-image and editing. Use gemini-3.1-flash-image when consistency matters more than price."
+    },
+    {
+      "model": "gemini-3.1-flash-image-preview",
+      "name": "Gemini 3.1 Flash Image (preview model)",
+      "price": "$0.05+",
+      "pricing": {
+        "1K": 0.05,
+        "2K": 0.05,
+        "4K": 0.08
+      },
+      "docs": "https://apimodels.app/docs/image",
+      "page": "https://apimodels.app/models/nanobanana2",
+      "requires_image": false,
+      "note": "The preview model id of Gemini 3.1 Flash Image, billed separately from gemini-3.1-flash-image: $0.05 at 1K/2K, $0.08 at 4K. Text-to-image and editing."
     },
     {
       "model": "gpt-image-2",
@@ -371,6 +440,30 @@
       "docs": "https://apimodels.app/docs/image",
       "page": "https://apimodels.app/models/sparkpix-image-edit",
       "requires_image": false
+    },
+    {
+      "model": "z-image-spicy",
+      "name": "Z-Image Spicy",
+      "price": "$0.015",
+      "pricing": {
+        "per image": 0.015
+      },
+      "docs": "https://apimodels.app/docs/z-image-spicy",
+      "page": "https://apimodels.app/models/z-image-spicy",
+      "requires_image": false,
+      "note": "Text-to-image only (no reference images). Exact output size from 256 to 1536 px per side: pass width x height, an OpenAI-style size or an aspect ratio. About 15 s per image; seed supported for repeatable output."
+    },
+    {
+      "model": "z-image-spicy-pro",
+      "name": "Z-Image Spicy Pro",
+      "price": "$0.03",
+      "pricing": {
+        "per image": 0.03
+      },
+      "docs": "https://apimodels.app/docs/z-image-spicy",
+      "page": "https://apimodels.app/models/z-image-spicy-pro",
+      "requires_image": false,
+      "note": "Higher-resolution tier of Z-Image Spicy: text-to-image only, exact size from 256 to 2560 px per side, about 12-21 s per image; seed supported."
     }
   ]
 }

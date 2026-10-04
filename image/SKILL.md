@@ -152,6 +152,10 @@ candidates with prices and let them choose.
 | Realistic portrait / highest fidelity | `gemini-3-pro-image` | Gemini 3 Pro Image |
 | Fast cheap Gemini | `gemini-3.1-flash-image` ($0.06 at 1K/2K) | `gemini-2.5-flash-image` is retired by Google on 2026-10-02 — do not start new work on it |
 | Fast, cheap volume renders | `doubao-seedream-5-0-flash` ($0.03) | ~10–15 s, 1K and 2K same price, no 4K |
+| Fastest, lowest-cost generation | `flux-2-klein-4b` ($0.006) | About 1-2 s; up to 3 reference images (+$0.0015 each); fixed ~2 MP, no resolution choice |
+| Gemini 3 Pro on a budget | `gemini-3-pro-image-gemini` ($0.03 flat, incl. 4K) | Same model as `gemini-3-pro-image` at a lower flat price; pick the standard one when consistency matters most |
+| Gemini Flash on a budget | `gemini-3.1-flash-image-gemini` ($0.025 flat) | Same model as `gemini-3.1-flash-image` at a lower flat price |
+| Exact pixel size, e.g. a 1200x628 banner | `z-image-spicy` ($0.015, up to 1536 px) or `z-image-spicy-pro` ($0.03, up to 2560 px) | Any width x height; text-to-image only, no reference images |
 | **Transparent-background edit** — product cut-out, sticker, logo on alpha | `doubao-seedream-5-0-flash` + `--background transparent` | Pass one PNG that already has an alpha channel; the result keeps it. Pro supports this too |
 | **Split an image into layers** — editable poster, text/subject/props separated | `doubao-seedream-5-0-flash` + `--layers` | One input image → base + up to 16 transparent PNG layers with names and positions. $0.03 per output image |
 | Controlled edits, marked regions, multilingual text | `doubao-seedream-5-0-pro` ($0.03 1K / $0.06 2K) | Point at the region to change (box, arrow, hand-drawn mark); 1K/2K only, no 4K |
